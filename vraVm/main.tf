@@ -11,7 +11,7 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "dc" {
-  name = "WLD01"
+  name = "Noris"
 }
 
 data "vsphere_datastore" "datastore" {
