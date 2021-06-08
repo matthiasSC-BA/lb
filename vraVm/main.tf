@@ -23,12 +23,12 @@ data "vsphere_resource_pool" "pool" {
   name          = "testpool"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
-/*
+
 data "vsphere_network" "network" {
-  name          = "vlan55"
+  name          = "VM Network"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
-*/
+
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
 
@@ -36,11 +36,11 @@ resource "vsphere_virtual_machine" "vm" {
   datastore_id     = "${data.vsphere_datastore.datastore.id}"
 
 
-  /*
+
   network_interface {
     network_id = "${data.vsphere_network.network.id}"
   }
- */ 
+
   num_cpus = 1
   memory   = 1024
   guest_id = "Ubuntu"
