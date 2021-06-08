@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    vra = {
-      source = "vmware/vra"
-      version = "0.3.5"
-    }
-  }
-}
-
 variable "deployment_name" {
   type        = string
   description = "VM Name"
@@ -26,6 +17,7 @@ variable "blueprint_version" {
 
 provider "vra" {
   insecure = true
+  url = "https://vra8.vdi.sclabs.net"
 }
 
 resource "vra_deployment" "this" {
