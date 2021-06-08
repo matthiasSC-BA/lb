@@ -18,7 +18,7 @@ variable "blueprint_version" {
 provider "vra" {
   insecure = true
   url = "https://vra8.vdi.sclabs.net"
-  refresh_token = ""
+  refresh_token = "uhlsrxhilMjgdzAwgxPXOs8Lbe6Pyw6h"
 }
 
 resource "vra_deployment" "this" {
