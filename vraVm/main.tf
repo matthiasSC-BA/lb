@@ -43,7 +43,7 @@ resource "vsphere_virtual_machine" "vm" {
 
   num_cpus = 1
   memory   = 1024
-  guest_id = "k8s-play-tmpl"
+  guest_id = "other3xLinux64Guest"
 
   disk {
     label = "disk0"
