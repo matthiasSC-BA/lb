@@ -50,9 +50,17 @@ data "template_cloudinit_config" "cloud-config" {
       content_type = "text/cloud-config"
       content      = <<-EOT
                      #cloud-config
-                     packages:
-                       - my-interesting-application
-                       - rpmdevtools
+                     groups:
+                       - group: sudo
+                     users:
+                       - name: '${input.username}'
+                         plain_text_passwd: '${input.password}'
+                         lock_passwd: false
+                         ssh_pwauth: 'yes'
+                         sudo:
+                           - 'ALL=(ALL) NOPASSWD:ALL'
+                         groups: sudo
+                         shell: /bin/bash
                      EOT
     }
 } 
