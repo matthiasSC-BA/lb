@@ -29,7 +29,7 @@ data "vsphere_datacenter" "dc" {
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "WLD01"
+  name          = "Workload_Cluster"
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
