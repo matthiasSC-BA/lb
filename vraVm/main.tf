@@ -125,12 +125,12 @@ resource "vsphere_virtual_machine" "vm" {
 #        { "local-hostname": "${var.vm_name}" }
 #     EOT 
 #   }
-#   vapp {
-#     properties = {
-#       hostname = var.vm_name
-#       user-data = base64encode(file("userdata.yaml"))
-#     }
-#   }
+  vapp {
+    properties = {
+      hostname = var.vm_name
+      user-data = base64gzip(data.template_file.cloud-init.rendered)
+    }
+  }
 #   guestinfo = {
 #     userdata.encoding = "base64"
 #     userdata = base64encode(file("userdata.yaml"))
