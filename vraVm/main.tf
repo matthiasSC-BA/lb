@@ -40,7 +40,8 @@ data "vsphere_network" "network" {
 
 # Get data about the image you're going to clone from.
 data "vsphere_virtual_machine" "image" {
-    name = "ubuntuTemplate"
+    name = "k8s-play-tmpl"
+   # name = "ubuntuTemplate"
     datacenter_id = data.vsphere_datacenter.dc.id
 }
 
