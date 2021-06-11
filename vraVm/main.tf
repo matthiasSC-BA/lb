@@ -108,7 +108,7 @@ resource "vsphere_virtual_machine" "vm" {
     }
   }
   guestinfo = {
-    userdata.encoding = "gzip+base64"
+    userdata.encoding = "base64"
     userdata = base64encode(file("userdata.yaml"))
   }
 
