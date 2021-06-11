@@ -50,15 +50,9 @@ data "template_cloudinit_config" "cloud-config" {
       content_type = "text/cloud-config"
       content      = <<-EOT
                      #cloud-config
-                     users:
-                       - name: 'mat'
-                         plain_text_passwd: 'VMware1!'
-                         lock_passwd: false
-                         ssh_pwauth: 'yes'
-                         sudo:
-                           - 'ALL=(ALL) NOPASSWD:ALL'
-                         groups: sudo
-                         shell: /bin/bash
+                     packages:
+                       - my-interesting-application
+                       - rpmdevtools
                      EOT
     }
 } 
