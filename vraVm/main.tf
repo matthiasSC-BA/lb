@@ -73,6 +73,15 @@ EOF
     local_hostname = var.vm_name
   }
 }
+data "template_cloudinit_config" "meta_init" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.meta_init.rendered
+  }
+}
 
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
@@ -101,9 +110,8 @@ resource "vsphere_virtual_machine" "vm" {
   wait_for_guest_net_timeout    = 5
   
   extra_config = {    
-    "guestinfo.metadata" = "${base64gzip(data.template_file.meta_init.rendered)}"
-    "guestinfo.metadata.encoding" = "gzip+base64"
-    "guestinfo.userdata" = "${base64gzip(data.template_file.cloud-init.rendered)}"
+    "guestinfo.metadata" = base64gzip(data.template_file.meta_init.rendered)
+    "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
   }
 #   vapp {
 #     properties = {
