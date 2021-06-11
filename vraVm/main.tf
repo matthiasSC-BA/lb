@@ -110,11 +110,15 @@ resource "vsphere_virtual_machine" "vm" {
     size  = 10
   }
   wait_for_guest_net_timeout    = 5
-  vapp {
-    properties = {
+  
+  extra_config = {
     "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
-        }
   }
+#   vapp {
+#     properties = {
+#     "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
+#         }
+#   }
 #   extra_config = {
 #     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
 #     "guestinfo.userdata.encoding" = "gzip+base64"
