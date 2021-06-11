@@ -78,10 +78,10 @@ resource "vsphere_virtual_machine" "vm" {
   wait_for_guest_net_timeout    = -1
   
   extra_config {
-    "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
-    "guestinfo.userdata.encoding" = "gzip+base64"
-    "guestinfo.metadata"          = <<-EOT
-       { "local-hostname": "${var.hostname}.${var.domain}" }
-    EOT
+  #  "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
+  #  "guestinfo.userdata.encoding" = "gzip+base64"
+  #  "guestinfo.metadata"          = <<-EOT
+  #     { "local-hostname": "${var.hostname}.${var.domain}" }
+  #  EOT
   }
 }
