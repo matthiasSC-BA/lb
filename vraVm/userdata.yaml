@@ -1,5 +1,4 @@
-hostname: ${hostname}
-
+#cloud-config
 users:
   - name: test
     primary_group: test
