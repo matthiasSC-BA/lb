@@ -43,6 +43,12 @@ data "vsphere_network" "network" {
   datacenter_id = "${data.vsphere_datacenter.dc.id}"
 }
 
+# Get data about the image you're going to clone from.
+data "vsphere_virtual_machine" "image" {
+    name = "k8s-play-tmpl"
+    datacenter_id = "${data.vsphere_datacenter.dc.id}"
+}
+
 # Configure the cloud-init data you're going to use
 data "template_cloudinit_config" "cloud-config" {
     gzip          = true
@@ -81,7 +87,10 @@ resource "vsphere_virtual_machine" "vm" {
 
   num_cpus = 1
   memory   = 1024
-  guest_id = "other3xLinux64Guest"
+  guest_id = "${data.vsphere_virtual_machine.image.guest_id}"
+  clone {
+    template_uuid = "${data.vsphere_virtual_machine.image.id}"
+  }
 
   disk {
     label = "disk0"
