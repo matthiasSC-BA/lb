@@ -107,22 +107,27 @@ resource "vsphere_virtual_machine" "vm" {
       user-data = base64encode(file("userdata.yaml"))
     }
   }
-  extra_config = {
-    "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
-    "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
-    "guestinfo.userdata.encoding" = "base64"
+  guestinfo = {
+    userdata.encoding = "gzip+base64"
+    userdata = base64encode(file("userdata.yaml"))
   }
-  provisioner "remote-exec" {
-    inline = [
-       "sudo cloud-init status --wait"
-    ]
-    connection {
-      host     = "${self.default_ip_address}"
-      type     = "ssh"
- 			user     = "matthias"
- 			password = "VMware1!"
- 		} 
-  }
+
+#   extra_config = {
+#     "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
+#     "guestinfo.metadata.encoding" = "base64"
+#     "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
+#     "guestinfo.userdata.encoding" = "base64"
+#   }
+#   provisioner "remote-exec" {
+#     inline = [
+#        "sudo cloud-init status --wait"
+#     ]
+#     connection {
+#       host     = "${self.default_ip_address}"
+#       type     = "ssh"
+#  			user     = "matthias"
+#  			password = "VMware1!"
+#  		} 
+#   }
 
 }
