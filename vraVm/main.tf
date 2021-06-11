@@ -68,6 +68,23 @@ data "vsphere_virtual_machine" "image" {
 #     }
 # } 
 
+data "template_file" "cloud-init" {
+  template = file("userdata.yaml")
+
+  vars = {
+    hostname = var.vm_name    
+  }
+}
+data "template_cloudinit_config" "cloud-init" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.cloud-init.rendered
+  }
+}
+
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
 
@@ -93,7 +110,11 @@ resource "vsphere_virtual_machine" "vm" {
     size  = 10
   }
   wait_for_guest_net_timeout    = 5
-  
+  vapp {
+    properties = {
+      "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
+    }
+  }
 #   extra_config = {
 #     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
 #     "guestinfo.userdata.encoding" = "gzip+base64"
@@ -101,23 +122,23 @@ resource "vsphere_virtual_machine" "vm" {
 #        { "local-hostname": "${var.vm_name}" }
 #     EOT
 #   }
-  vapp {
-    properties = {
-      hostname = var.vm_name
-      user-data = base64encode(file("userdata.yaml"))
-    }
-  }
+#   vapp {
+#     properties = {
+#       hostname = var.vm_name
+#       user-data = base64encode(file("userdata.yaml"))
+#     }
+#   }
 #   guestinfo = {
 #     userdata.encoding = "base64"
 #     userdata = base64encode(file("userdata.yaml"))
 #   }
 
-  extra_config = {
-    "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
-    "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
-    "guestinfo.userdata.encoding" = "base64"
-  }
+#   extra_config = {
+#     "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
+#     "guestinfo.metadata.encoding" = "base64"
+#     "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
+#     "guestinfo.userdata.encoding" = "base64"
+#   }
   provisioner "remote-exec" {
     inline = [
        "sudo cloud-init status --wait"
