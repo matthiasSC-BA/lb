@@ -1,14 +1,12 @@
-hostname: "testHostName"
-runcmd:
-  - "hostnamectl set-hostname testHostName"
+hostname: testHostName
 groups:
   - group: sudo
 users:
-  - name: "test"
-    plain_text_passwd: "VMware1!"
+  - name: test
+    plain_text_passwd: VMware1!
     lock_passwd: false
-    ssh_pwauth: "yes"
+    ssh_pwauth: yes
     sudo:
-      - "ALL=(ALL) NOPASSWD:ALL"
+      - ALL=(ALL) NOPASSWD:ALL
     groups: sudo
     shell: /bin/bash
