@@ -114,6 +114,7 @@ resource "vsphere_virtual_machine" "vm" {
     properties = {
     "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
         }
+  }
 #   extra_config = {
 #     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
 #     "guestinfo.userdata.encoding" = "gzip+base64"
