@@ -3,11 +3,6 @@ variable "vm_name" {
   description = "VM Name"
 }
 
-variable "hostname" {
-  type        = string
-  description = "hostname"
-}
-
 variable "username" {
   type        = string
   description = "username"
@@ -60,15 +55,13 @@ data "template_cloudinit_config" "cloud-config" {
       content_type = "text/cloud-config"
       content      = <<-EOT
                      #cloud-config
-                     groups:
-                       - group: sudo
                      users:
-                       - name: '${var.username}'
-                         plain_text_passwd: '${var.password}'
+                       - name: "${var.username}"
+                         plain_text_passwd: "${var.password}"
                          lock_passwd: false
-                         ssh_pwauth: 'yes'
+                         ssh_pwauth: "yes"
                          sudo:
-                           - 'ALL=(ALL) NOPASSWD:ALL'
+                           - "ALL=(ALL) NOPASSWD:ALL"
                          groups: sudo
                          shell: /bin/bash
                      EOT
@@ -105,7 +98,7 @@ resource "vsphere_virtual_machine" "vm" {
     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
     "guestinfo.userdata.encoding" = "gzip+base64"
     "guestinfo.metadata"          = <<-EOT
-       { "local-hostname": "${var.vm_name}.sclabs.net" }
+       { "local-hostname": "${var.vm_name}" }
     EOT
   }
 
