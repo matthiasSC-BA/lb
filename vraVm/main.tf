@@ -92,7 +92,7 @@ resource "vsphere_virtual_machine" "vm" {
     label = "disk0"
     size  = 10
   }
-  wait_for_guest_net_timeout    = -1
+  wait_for_guest_net_timeout    = 5
   
 #   extra_config = {
 #     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
