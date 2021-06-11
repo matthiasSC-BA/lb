@@ -1,12 +1,11 @@
-hostname: testHostName
-groups:
-  - group: sudo
+hostname: ${hostname}
+
 users:
   - name: test
+    primary_group: test
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo, wheel
+    ssh_import_id: None
     plain_text_passwd: VMware1!
     lock_passwd: false
-    ssh_pwauth: yes
-    sudo:
-      - ALL=(ALL) NOPASSWD:ALL
-    groups: sudo
-    shell: /bin/bash
+    
