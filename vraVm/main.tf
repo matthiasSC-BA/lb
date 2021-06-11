@@ -8,9 +8,13 @@ variable "hostname" {
   description = "hostname"
 }
 
-variable "domain" {
+variable "username" {
   type        = string
-  description = "domain"
+  description = "username"
+}
+variable "password" {
+  type        = string
+  description = "password"
 }
 
 
@@ -53,8 +57,8 @@ data "template_cloudinit_config" "cloud-config" {
                      groups:
                        - group: sudo
                      users:
-                       - name: '${input.username}'
-                         plain_text_passwd: '${input.password}'
+                       - name: '${var.username}'
+                         plain_text_passwd: '${var.password}'
                          lock_passwd: false
                          ssh_pwauth: 'yes'
                          sudo:
@@ -89,7 +93,7 @@ resource "vsphere_virtual_machine" "vm" {
     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
     "guestinfo.userdata.encoding" = "gzip+base64"
     "guestinfo.metadata"          = <<-EOT
-       { "local-hostname": "${var.hostname}.${var.domain}" }
+       { "local-hostname": "${var.hostname}.sclabs.net" }
     EOT
   }
 
