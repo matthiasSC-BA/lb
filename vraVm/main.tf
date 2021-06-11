@@ -117,12 +117,12 @@ resource "vsphere_virtual_machine" "vm" {
     inline = [
        "sudo cloud-init status --wait"
     ]
-#     connection {
+    connection {
 # 			host = vsphere_virtual_machine.vm.ip
 # 			type     = "ssh"
-# 			user     = "matthias"
-# 			password = "VMware1!"
-# 		} 
+ 			user     = "matthias"
+ 			password = "VMware1!"
+ 		} 
   }
 
 }
