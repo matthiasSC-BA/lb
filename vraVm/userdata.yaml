@@ -3,7 +3,7 @@ runcmd:
 groups:
   - group: sudo
 users:
-  - name: matthias
+  - name: test
     plain_text_passwd: VMware1!
     lock_passwd: false
     ssh_pwauth: 'yes'
