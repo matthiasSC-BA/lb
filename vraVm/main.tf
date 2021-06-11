@@ -110,8 +110,10 @@ resource "vsphere_virtual_machine" "vm" {
   wait_for_guest_net_timeout    = 5
   
   extra_config = {    
-    "guestinfo.metadata" = base64gzip(data.template_file.meta_init.rendered)
-    "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
+    "guestinfo.metadata" = data.template_file.meta_init.rendered
+    "guestinfo.metadata.encoding" = "gzip+base64"
+    "guestinfo.userdata" = data.template_file.cloud-init.rendered
+    "guestinfo.userdata.encoding" = "gzip+base64"
   }
 #   vapp {
 #     properties = {
@@ -125,12 +127,12 @@ resource "vsphere_virtual_machine" "vm" {
 #        { "local-hostname": "${var.vm_name}" }
 #     EOT 
 #   }
-  vapp {
-    properties = {
-      hostname = var.vm_name
-      user-data = base64gzip(data.template_file.cloud-init.rendered)
-    }
-  }
+#   vapp {
+#     properties = {
+#       hostname = var.vm_name
+#       user-data = base64gzip(data.template_file.cloud-init.rendered)
+#     }
+#   }
 #   guestinfo = {
 #     userdata.encoding = "base64"
 #     userdata = base64encode(file("userdata.yaml"))
