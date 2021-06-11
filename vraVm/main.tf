@@ -101,11 +101,28 @@ resource "vsphere_virtual_machine" "vm" {
 #        { "local-hostname": "${var.vm_name}" }
 #     EOT
 #   }
+  vapp {
+    properties = {
+      hostname = var.vm_name
+      user-data = base64encode(file("userdata.yaml"))
+    }
+  }
   extra_config = {
     "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
     "guestinfo.userdata.encoding" = "base64"
+  }
+  provisioner "remote-exec" {
+    inline = [
+       "sudo cloud-init status --wait"
+    ]
+    connection {
+			host = vsphere_virtual_machine.vm.ip
+			type     = "ssh"
+			user     = "matthias"
+			password = "VMware1!"
+		} 
   }
 
 }
