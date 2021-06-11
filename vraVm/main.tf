@@ -67,6 +67,7 @@ data "template_file" "meta_init" {
   template = <<EOF
 {
         "local-hostname": "$${local_hostname}"
+        "instance-id": "$${local_hostname}"
 }
 EOF
  
