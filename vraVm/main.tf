@@ -40,8 +40,8 @@ data "vsphere_network" "network" {
 
 # Get data about the image you're going to clone from.
 data "vsphere_virtual_machine" "image" {
-    name = "k8s-play-tmpl"
-   # name = "ubuntuTemplate"
+  #  name = "k8s-play-tmpl"
+    name = "ubuntuTemplate"
     datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -100,6 +100,13 @@ resource "vsphere_virtual_machine" "vm" {
   guest_id = data.vsphere_virtual_machine.image.guest_id
   clone {
     template_uuid = data.vsphere_virtual_machine.image.id
+    customize {
+      linux_options {
+        host_name = var.vm_name
+        domain    = sclabs.net
+      }
+      network_interface {}
+    }
   }
   cdrom {
     client_device = true
