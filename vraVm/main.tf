@@ -91,6 +91,9 @@ resource "vsphere_virtual_machine" "vm" {
   clone {
     template_uuid = "${data.vsphere_virtual_machine.image.id}"
   }
+  cdrom {
+    client_device = true
+  }
 
   disk {
     label = "disk0"
@@ -102,7 +105,7 @@ resource "vsphere_virtual_machine" "vm" {
     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
     "guestinfo.userdata.encoding" = "gzip+base64"
     "guestinfo.metadata"          = <<-EOT
-       { "local-hostname": "${var.hostname}.sclabs.net" }
+       { "local-hostname": "${var.vm_name}.sclabs.net" }
     EOT
   }
 
