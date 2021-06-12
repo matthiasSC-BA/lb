@@ -64,28 +64,6 @@ data "template_cloudinit_config" "cloud-init" {
   }
 }
 
-# data "template_file" "meta_init" {
-#   template = <<EOF
-# {
-#         "local-hostname": "$${local_hostname}"
-#         "instance-id": "$${local_hostname}"
-# }
-# EOF
- 
-#   vars = {
-#     local_hostname = var.vm_name
-#   }
-# }
-# data "template_cloudinit_config" "meta_init" {
-#   gzip          = true
-#   base64_encode = true
-
-#   part {
-#     content_type = "text/cloud-config"
-#     content      = data.template_file.meta_init.rendered
-#   }
-# }
-
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
 
@@ -110,14 +88,8 @@ resource "vsphere_virtual_machine" "vm" {
     label = "disk0"
     size  = 10
   }
-  wait_for_guest_net_timeout    = 5
+  wait_for_guest_net_timeout    = 10
   
-#   extra_config = {    
-#     "guestinfo.metadata" = data.template_file.meta_init.rendered
-#     "guestinfo.metadata.encoding" = "gzip+base64"
-#     "guestinfo.userdata" = data.template_file.cloud-init.rendered
-#     "guestinfo.userdata.encoding" = "gzip+base64"
-#   }
   vapp {
     properties = {
       hostname = var.vm_name
