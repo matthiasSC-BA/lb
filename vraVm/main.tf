@@ -155,7 +155,7 @@ resource "vsphere_virtual_machine" "vm" {
 #   }
   provisioner "remote-exec" {
     inline = [
-       "sudo cloud-init init"
+       "sudo cloud-init init",
        "sudo cloud-init status --wait"
     ]
     connection {
