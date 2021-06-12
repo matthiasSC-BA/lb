@@ -1,10 +1,10 @@
 #cloud-config
 users:
   - name: test
-    primary_group: test
+    primary_group: ${username}
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: sudo, wheel
     ssh_import_id: None
-    plain_text_passwd: VMware1!
+    plain_text_passwd: ${password}
     lock_passwd: false
     
