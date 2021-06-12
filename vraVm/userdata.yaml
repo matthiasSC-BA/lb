@@ -1,10 +1,11 @@
 #cloud-config
 users:
-  - name: test
-    primary_group: ${username}
-    sudo: ALL=(ALL) NOPASSWD:ALL
-    groups: sudo, wheel
-    ssh_import_id: None
+  - name: ${username}
     plain_text_passwd: ${password}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo
+    #ssh_import_id: None    
     lock_passwd: false
+    ssh_pwauth: yes
+    shell: /bin/bash
     
