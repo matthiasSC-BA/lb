@@ -103,7 +103,7 @@ resource "vsphere_virtual_machine" "vm" {
     customize {
       linux_options {
         host_name = var.vm_name
-        domain    = "sclabs.net"
+        domain    = ""
       }
       network_interface {}
     }
@@ -136,12 +136,12 @@ resource "vsphere_virtual_machine" "vm" {
 #        { "local-hostname": "${var.vm_name}" }
 #     EOT 
 #   }
-  vapp {
-    properties = {
-      hostname = var.vm_name
-      user-data = base64gzip(data.template_file.cloud-init.rendered)
-    }
-  }
+#   vapp {
+#     properties = {
+#       hostname = var.vm_name
+#       user-data = base64gzip(data.template_file.cloud-init.rendered)
+#     }
+#   }
 #   guestinfo = {
 #     userdata.encoding = "base64"
 #     userdata = base64encode(file("userdata.yaml"))
