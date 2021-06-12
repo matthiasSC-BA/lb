@@ -40,8 +40,8 @@ data "vsphere_network" "network" {
 
 # Get data about the image you're going to clone from.
 data "vsphere_virtual_machine" "image" {
-  #  name = "k8s-play-tmpl"
-    name = "ubuntuTemplate"
+    name = "k8s-play-tmpl"
+  #  name = "ubuntuTemplate"
     datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -153,17 +153,17 @@ resource "vsphere_virtual_machine" "vm" {
 #     "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
 #     "guestinfo.userdata.encoding" = "base64"
 #   }
-  provisioner "remote-exec" {
-    inline = [
-      # "sudo cloud-init init",
-       "sudo cloud-init status --wait"
-    ]
-    connection {
-      host     = vsphere_virtual_machine.vm.default_ip_address
-      type     = "ssh"
-      user     = "matthias"
- 			password = "VMware1!"
- 		} 
-  }
+#   provisioner "remote-exec" {
+#     inline = [
+#       # "sudo cloud-init init",
+#        "sudo cloud-init status --wait"
+#     ]
+#     connection {
+#       host     = vsphere_virtual_machine.vm.default_ip_address
+#       type     = "ssh"
+#       user     = "matthias"
+#  			password = "VMware1!"
+#  		} 
+#   }
 
 }
