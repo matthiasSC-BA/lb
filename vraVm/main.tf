@@ -14,7 +14,6 @@ variable "password" {
 
 
 provider "vsphere" {
-
   # If you have a self-signed cert
   allow_unverified_ssl = true
 }
@@ -51,6 +50,8 @@ data "template_file" "cloud-init" {
 
   vars = {
     hostname = var.vm_name    
+    username = var.username  
+    password = var.password  
   }
 }
 data "template_cloudinit_config" "cloud-init" {
@@ -63,27 +64,27 @@ data "template_cloudinit_config" "cloud-init" {
   }
 }
 
-data "template_file" "meta_init" {
-  template = <<EOF
-{
-        "local-hostname": "$${local_hostname}"
-        "instance-id": "$${local_hostname}"
-}
-EOF
+# data "template_file" "meta_init" {
+#   template = <<EOF
+# {
+#         "local-hostname": "$${local_hostname}"
+#         "instance-id": "$${local_hostname}"
+# }
+# EOF
  
-  vars = {
-    local_hostname = var.vm_name
-  }
-}
-data "template_cloudinit_config" "meta_init" {
-  gzip          = true
-  base64_encode = true
+#   vars = {
+#     local_hostname = var.vm_name
+#   }
+# }
+# data "template_cloudinit_config" "meta_init" {
+#   gzip          = true
+#   base64_encode = true
 
-  part {
-    content_type = "text/cloud-config"
-    content      = data.template_file.meta_init.rendered
-  }
-}
+#   part {
+#     content_type = "text/cloud-config"
+#     content      = data.template_file.meta_init.rendered
+#   }
+# }
 
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
@@ -100,13 +101,6 @@ resource "vsphere_virtual_machine" "vm" {
   guest_id = data.vsphere_virtual_machine.image.guest_id
   clone {
     template_uuid = data.vsphere_virtual_machine.image.id
-#     customize {
-#       linux_options {
-#         host_name = var.vm_name
-#         domain    = ""
-#       }
-#       network_interface {}
-#     }
   }
   cdrom {
     client_device = true
@@ -118,23 +112,11 @@ resource "vsphere_virtual_machine" "vm" {
   }
   wait_for_guest_net_timeout    = 5
   
-  extra_config = {    
-    "guestinfo.metadata" = data.template_file.meta_init.rendered
-    "guestinfo.metadata.encoding" = "gzip+base64"
-    "guestinfo.userdata" = data.template_file.cloud-init.rendered
-    "guestinfo.userdata.encoding" = "gzip+base64"
-  }
-#   vapp {
-#     properties = {
-#     "guestinfo.userdata" = base64gzip(data.template_file.cloud-init.rendered)
-#         }
-#   }
-#   extra_config = {
-#     "guestinfo.userdata"          = "${data.template_cloudinit_config.cloud-config.rendered}"
+#   extra_config = {    
+#     "guestinfo.metadata" = data.template_file.meta_init.rendered
+#     "guestinfo.metadata.encoding" = "gzip+base64"
+#     "guestinfo.userdata" = data.template_file.cloud-init.rendered
 #     "guestinfo.userdata.encoding" = "gzip+base64"
-#     "guestinfo.metadata"          = <<-EOT
-#        { "local-hostname": "${var.vm_name}" }
-#     EOT 
 #   }
   vapp {
     properties = {
@@ -142,28 +124,4 @@ resource "vsphere_virtual_machine" "vm" {
       user-data = base64gzip(data.template_file.cloud-init.rendered)
     }
   }
-#   guestinfo = {
-#     userdata.encoding = "base64"
-#     userdata = base64encode(file("userdata.yaml"))
-#   }
-
-#   extra_config = {
-#     "guestinfo.metadata"          = base64encode(file("metadata.yaml"))
-#     "guestinfo.metadata.encoding" = "base64"
-#     "guestinfo.userdata"          = base64encode(file("userdata.yaml"))
-#     "guestinfo.userdata.encoding" = "base64"
-#   }
-#   provisioner "remote-exec" {
-#     inline = [
-#       # "sudo cloud-init init",
-#        "sudo cloud-init status --wait"
-#     ]
-#     connection {
-#       host     = vsphere_virtual_machine.vm.default_ip_address
-#       type     = "ssh"
-#       user     = "matthias"
-#  			password = "VMware1!"
-#  		} 
-#   }
-
 }
