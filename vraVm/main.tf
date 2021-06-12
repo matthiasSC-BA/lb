@@ -100,13 +100,13 @@ resource "vsphere_virtual_machine" "vm" {
   guest_id = data.vsphere_virtual_machine.image.guest_id
   clone {
     template_uuid = data.vsphere_virtual_machine.image.id
-    customize {
+#     customize {
 #       linux_options {
 #         host_name = var.vm_name
 #         domain    = ""
 #       }
-      network_interface {}
-    }
+#       network_interface {}
+#     }
   }
   cdrom {
     client_device = true
